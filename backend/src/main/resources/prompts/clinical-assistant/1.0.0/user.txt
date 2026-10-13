@@ -1,0 +1,22 @@
+Pseudonymized encounter context (no identifiers).
+Patient: {{demographics}}
+Encounter type: {{encounterType}}
+
+<facts>
+{{facts}}
+</facts>
+
+<assessment>
+{{assessmentSummary}}
+</assessment>
+
+<knowledge>
+{{knowledge}}
+</knowledge>
+
+<conversation>
+{{conversation}}
+</conversation>
+
+Clinician question:
+{{question}}

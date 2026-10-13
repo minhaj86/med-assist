@@ -1,0 +1,159 @@
+# MedAssist backend configuration. Secrets are never stored here: every credential comes from the environment.
+spring:
+  application:
+    name: medassist-backend
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/medassist}
+    username: ${DB_APP_USER:medassist_app}
+    password: ${DB_APP_PASSWORD:}
+    hikari:
+      pool-name: medassist
+      maximum-pool-size: ${DB_POOL_SIZE:10}
+  flyway:
+    # Migrations run as the schema owner; the application connects as a DML-only role.
+    user: ${DB_MIGRATION_USER:${spring.datasource.username}}
+    password: ${DB_MIGRATION_PASSWORD:${spring.datasource.password}}
+    placeholders:
+      app_db_role: ${DB_APP_USER:medassist_app}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  servlet:
+    multipart:
+      max-file-size: ${KNOWLEDGE_MAX_UPLOAD_SIZE:20MB}
+      max-request-size: ${KNOWLEDGE_MAX_UPLOAD_SIZE:20MB}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Keys are fetched from the JWK set; issuer and audience are validated on every token.
+          jwk-set-uri: ${OIDC_JWK_SET_URI:http://localhost:8180/realms/medassist/protocol/openid-connect/certs}
+          issuer-uri: ${OIDC_ISSUER_URI:http://localhost:8180/realms/medassist}
+          audiences: ${OIDC_AUDIENCE:medassist-api}
+
+server:
+  port: ${SERVER_PORT:8081}
+  shutdown: graceful
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: never
+    include-message: never
+    include-binding-errors: never
+    include-exception: false
+    whitelabel:
+      enabled: false
+
+management:
+  server:
+    # Separate, non-public port for health and metrics scraping.
+    port: ${MANAGEMENT_PORT:9091}
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    distribution:
+      percentiles-histogram:
+        assessment_duration: true
+        llm_duration: true
+        rag_query_duration: true
+        clinical_rule_execution_duration: true
+        knowledge_ingestion_duration: true
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
+    export:
+      enabled: ${TRACING_EXPORT_ENABLED:false}
+  opentelemetry:
+    resource-attributes:
+      service.name: ${spring.application.name}
+    tracing:
+      export:
+        otlp:
+          endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:http://localhost:4318/v1/traces}
+  otlp:
+    metrics:
+      export:
+        enabled: false
+
+logging:
+  pattern:
+    correlation: "[%X{correlationId:-},%X{traceId:-}] "
+  level:
+    root: INFO
+    com.medassist: INFO
+
+springdoc:
+  api-docs:
+    enabled: ${OPENAPI_ENABLED:true}
+  swagger-ui:
+    enabled: ${OPENAPI_ENABLED:true}
+    path: /swagger-ui.html
+  default-produces-media-type: application/json
+
+medassist:
+  security:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+    open-api-public: ${OPENAPI_PUBLIC:false}
+    hsts-enabled: ${HSTS_ENABLED:false}
+  demo:
+    seed-enabled: ${DEMO_SEED_ENABLED:false}
+  # AI provider: none | openai | azure-openai | openai-compatible (Ollama, vLLM, LM Studio, ...).
+  # With "none" every deterministic feature (rules, scores, retrieval, workflow) keeps working.
+  ai:
+    provider: ${AI_PROVIDER:none}
+    temperature: ${AI_TEMPERATURE:0.1}
+    max-output-tokens: ${AI_MAX_OUTPUT_TOKENS:4096}
+    timeout: ${AI_TIMEOUT:90s}
+    response-format: ${AI_RESPONSE_FORMAT:json_object}
+    max-attempts: ${AI_MAX_ATTEMPTS:2}
+    openai:
+      api-key: ${OPENAI_API_KEY:}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com/v1}
+      model: ${OPENAI_MODEL:}
+    azure-openai:
+      endpoint: ${AZURE_OPENAI_ENDPOINT:}
+      api-key: ${AZURE_OPENAI_API_KEY:}
+      deployment: ${AZURE_OPENAI_DEPLOYMENT:}
+      api-version: ${AZURE_OPENAI_API_VERSION:}
+    openai-compatible:
+      base-url: ${LOCAL_LLM_BASE_URL:http://localhost:11434/v1}
+      api-key: ${LOCAL_LLM_API_KEY:}
+      model: ${LOCAL_LLM_MODEL:}
+    resilience:
+      failure-rate-threshold: 50
+      sliding-window-size: 10
+      open-state-wait: 30s
+      max-concurrent-calls: ${AI_MAX_CONCURRENT_CALLS:4}
+  # Embeddings: local-hashing (offline, lexical, dev/test only) | openai | azure-openai | openai-compatible.
+  embedding:
+    provider: ${EMBEDDING_PROVIDER:local-hashing}
+    model: ${EMBEDDING_MODEL:}
+    dimensions: ${EMBEDDING_DIMENSIONS:0}
+  retention:
+    ai-raw-response-days: ${RETENTION_AI_RAW_RESPONSE_DAYS:30}
+    assistant-transcript-days: ${RETENTION_ASSISTANT_TRANSCRIPT_DAYS:365}
+  knowledge:
+    chunking:
+      max-chars: ${KNOWLEDGE_CHUNK_MAX_CHARS:1200}
+      overlap-chars: ${KNOWLEDGE_CHUNK_OVERLAP_CHARS:200}
+      min-chars: 80
+    retrieval:
+      top-k: ${KNOWLEDGE_TOP_K:6}
+      min-similarity: ${KNOWLEDGE_MIN_SIMILARITY:0.15}
+      max-chunks-per-document: 3

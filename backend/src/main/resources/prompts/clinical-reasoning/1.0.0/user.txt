@@ -1,0 +1,25 @@
+Pseudonymized encounter context (no identifiers).
+Patient: {{demographics}}
+Encounter type: {{encounterType}}
+
+<facts>
+{{facts}}
+</facts>
+
+Deterministic safety rule alerts already shown to the clinician (not AI output):
+{{ruleAlerts}}
+
+Clinical score results (demonstration calculators are not validated scores):
+{{scores}}
+
+<knowledge>
+{{knowledge}}
+</knowledge>
+
+Conditions discussed in the retrieved knowledge for these findings (candidates to evaluate, not conclusions):
+{{candidates}}
+
+Tasks:
+1. List red flags that are supported by cited facts (an empty list is acceptable).
+2. List up to {{maxDifferentials}} possible differential diagnoses for clinician consideration. For each give: why it is being considered, supporting and contradicting evidence with evidence ids, missing information, suggested investigations, what would help distinguish it, a concise reasoning summary and the K-keys that support the reasoning.
+3. List the main uncertainties and additional questions that would most change the assessment.

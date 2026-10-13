@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:medassist:schema:clinical-assistant-output:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["answer", "statements", "insufficientInformation", "proposedUpdates", "followUpQuestions"],
+  "properties": {
+    "answer": {"type": "string", "minLength": 2, "maxLength": 3000},
+    "statements": {
+      "type": "array",
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["statement", "evidenceIds"],
+        "properties": {
+          "statement": {"type": "string", "minLength": 2, "maxLength": 1000},
+          "evidenceIds": {"type": "array", "maxItems": 20, "items": {"type": "string", "maxLength": 20}}
+        }
+      }
+    },
+    "insufficientInformation": {"type": "boolean"},
+    "proposedUpdates": {
+      "type": "array",
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["category", "description", "rationale"],
+        "properties": {
+          "category": {"enum": ["SYMPTOM", "HISTORY"]},
+          "description": {"type": "string", "minLength": 2, "maxLength": 300},
+          "rationale": {"type": "string", "minLength": 2, "maxLength": 500}
+        }
+      }
+    },
+    "followUpQuestions": {"type": "array", "maxItems": 8, "items": {"type": "string", "minLength": 2, "maxLength": 300}}
+  }
+}

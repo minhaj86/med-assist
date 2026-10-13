@@ -1,0 +1,78 @@
+{
+  "redFlags": [
+    {
+      "title": "Tachycardia with reduced oxygen saturation",
+      "severity": "URGENT",
+      "reason": "Raised heart rate and reduced SpO2 alongside chest pain warrant prompt clinical review.",
+      "evidenceIds": ["F7", "F9"]
+    },
+    {
+      "title": "Chest pain features discussed for cardiac causes",
+      "severity": "WARNING",
+      "reason": "Pressure-like pain radiating to the left arm is discussed in the retrieved knowledge.",
+      "evidenceIds": ["F3", "K1", "K99"]
+    }
+  ],
+  "differentialDiagnoses": [
+    {
+      "condition": "Acute coronary syndrome",
+      "codingSystem": "SNOMED_CT",
+      "code": "394659003",
+      "confidence": "HIGH",
+      "whyConsidered": "Sudden pressure-like central chest pain radiating to the left arm with breathlessness.",
+      "supportingEvidence": [
+        {"statement": "Sudden pressure-like chest pain radiating to the left arm", "evidenceIds": ["F3"]},
+        {"statement": "Arm radiation and breathlessness are features discussed for acute coronary syndrome", "evidenceIds": ["K1", "F4"]}
+      ],
+      "contradictingEvidence": [
+        {"statement": "Troponin result is not yet available", "evidenceIds": []}
+      ],
+      "missingInformation": ["12-lead ECG", "Cardiac troponin"],
+      "suggestedInvestigations": [
+        {"name": "12-lead ECG", "reason": "Discussed as an early investigation in acute chest pain", "evidenceIds": ["K1"]},
+        {"name": "Cardiac troponin", "reason": "Helps identify myocardial injury", "evidenceIds": ["K1"]}
+      ],
+      "distinguishingFeatures": "ECG changes and troponin trend would help distinguish cardiac from non-cardiac causes.",
+      "reasoningSummary": "Evidence supports consideration of acute coronary syndrome; clinical evaluation is required.",
+      "citations": ["K1"]
+    },
+    {
+      "condition": "Pulmonary embolism",
+      "codingSystem": null,
+      "code": null,
+      "confidence": "MODERATE",
+      "whyConsidered": "Breathlessness with tachycardia and reduced oxygen saturation.",
+      "supportingEvidence": [
+        {"statement": "Tachycardia and reduced oxygen saturation", "evidenceIds": ["F7", "F9"]}
+      ],
+      "contradictingEvidence": [],
+      "missingInformation": ["Leg swelling or other venous thromboembolism risk factors"],
+      "suggestedInvestigations": [
+        {"name": "Structured clinical probability assessment", "reason": "Guides further testing"}
+      ],
+      "distinguishingFeatures": null,
+      "reasoningSummary": "Pulmonary embolism may be considered; insufficient information to reliably assess this possibility.",
+      "citations": ["K7"]
+    },
+    {
+      "condition": "Musculoskeletal chest pain",
+      "codingSystem": null,
+      "code": null,
+      "confidence": "LOW",
+      "whyConsidered": "Chest pain can have musculoskeletal causes.",
+      "supportingEvidence": [
+        {"statement": "Smith et al. (2019) found musculoskeletal pain to be common", "evidenceIds": ["K1"]}
+      ],
+      "contradictingEvidence": [
+        {"statement": "Radiation to the arm and breathlessness are less typical", "evidenceIds": ["F3", "F4"]}
+      ],
+      "missingInformation": ["Reproducibility of pain on palpation"],
+      "suggestedInvestigations": [],
+      "distinguishingFeatures": null,
+      "reasoningSummary": "The patient definitely does not have a serious cause.",
+      "citations": ["K1"]
+    }
+  ],
+  "uncertainties": ["Insufficient information to reliably assess this possibility without ECG and troponin results."],
+  "additionalQuestions": ["Is the pain exertional or pleuritic?", "Is there leg swelling or recent immobility?"]
+}

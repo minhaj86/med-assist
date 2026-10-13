@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:medassist:schema:clinical-reasoning-output:v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["redFlags", "differentialDiagnoses", "uncertainties", "additionalQuestions"],
+  "properties": {
+    "redFlags": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "severity", "reason", "evidenceIds"],
+        "properties": {
+          "title": {"type": "string", "minLength": 3, "maxLength": 200},
+          "severity": {"enum": ["INFO", "WARNING", "URGENT", "CRITICAL"]},
+          "reason": {"type": "string", "minLength": 3, "maxLength": 1000},
+          "evidenceIds": {"$ref": "#/$defs/evidenceIds"}
+        }
+      }
+    },
+    "differentialDiagnoses": {
+      "type": "array",
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["condition", "confidence", "whyConsidered", "supportingEvidence", "contradictingEvidence",
+          "missingInformation", "suggestedInvestigations", "reasoningSummary", "citations"],
+        "properties": {
+          "condition": {"type": "string", "minLength": 2, "maxLength": 200},
+          "codingSystem": {"enum": ["SNOMED_CT", "ICD_10", null]},
+          "code": {"type": ["string", "null"], "maxLength": 50},
+          "confidence": {"enum": ["LOW", "MODERATE", "HIGH"]},
+          "whyConsidered": {"type": "string", "minLength": 3, "maxLength": 1000},
+          "supportingEvidence": {"type": "array", "maxItems": 15, "items": {"$ref": "#/$defs/statement"}},
+          "contradictingEvidence": {"type": "array", "maxItems": 15, "items": {"$ref": "#/$defs/statement"}},
+          "missingInformation": {"type": "array", "maxItems": 15, "items": {"type": "string", "minLength": 2, "maxLength": 500}},
+          "suggestedInvestigations": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "reason"],
+              "properties": {
+                "name": {"type": "string", "minLength": 2, "maxLength": 200},
+                "reason": {"type": "string", "minLength": 2, "maxLength": 1000},
+                "evidenceIds": {"$ref": "#/$defs/evidenceIds"}
+              }
+            }
+          },
+          "distinguishingFeatures": {"type": ["string", "null"], "maxLength": 1000},
+          "reasoningSummary": {"type": "string", "minLength": 3, "maxLength": 2000},
+          "citations": {"$ref": "#/$defs/evidenceIds"}
+        }
+      }
+    },
+    "uncertainties": {"type": "array", "maxItems": 15, "items": {"type": "string", "minLength": 2, "maxLength": 500}},
+    "additionalQuestions": {"type": "array", "maxItems": 15, "items": {"type": "string", "minLength": 2, "maxLength": 500}}
+  },
+  "$defs": {
+    "evidenceIds": {"type": "array", "maxItems": 20, "items": {"type": "string", "maxLength": 20}},
+    "statement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "evidenceIds"],
+      "properties": {
+        "statement": {"type": "string", "minLength": 2, "maxLength": 1000},
+        "evidenceIds": {"$ref": "#/$defs/evidenceIds"}
+      }
+    }
+  }
+}

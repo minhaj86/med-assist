@@ -1,0 +1,112 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [{"system": "urn:medassist:tag", "code": "synthetic-test-data", "display": "SYNTHETIC TEST DATA"}]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "syn-fhir-patient",
+        "meta": {"tag": [{"system": "urn:medassist:tag", "code": "synthetic-test-data", "display": "SYNTHETIC TEST DATA"}]},
+        "identifier": [{"system": "urn:medassist:external-patient-id", "value": "SYN-FHIR-0001"}],
+        "name": [{"family": "Fhirexample", "given": ["Robin"]}],
+        "gender": "unknown",
+        "birthDate": "1962-07-01",
+        "extension": [{"url": "urn:medassist:fhir:extension:biological-sex", "valueCode": "FEMALE"}]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "syn-fhir-encounter",
+        "status": "in-progress",
+        "class": {"system": "http://terminology.hl7.org/CodeSystem/v3-ActCode", "code": "EMER"},
+        "subject": {"reference": "Patient/syn-fhir-patient"},
+        "period": {"start": "2026-10-01T09:30:00Z"},
+        "reasonCode": [{"text": "Breathlessness and wheeze (synthetic FHIR import)"}]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "status": "final",
+        "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}],
+        "code": {"coding": [{"system": "http://loinc.org", "code": "8867-4", "display": "Heart rate"}]},
+        "subject": {"reference": "Patient/syn-fhir-patient"},
+        "effectiveDateTime": "2026-10-01T09:35:00Z",
+        "valueQuantity": {"value": 112, "unit": "/min", "system": "http://unitsofmeasure.org", "code": "/min"}
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "status": "final",
+        "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}],
+        "code": {"coding": [{"system": "http://loinc.org", "code": "59408-5", "display": "Oxygen saturation in Arterial blood by Pulse oximetry"}]},
+        "subject": {"reference": "Patient/syn-fhir-patient"},
+        "effectiveDateTime": "2026-10-01T09:35:00Z",
+        "valueQuantity": {"value": 91, "unit": "%", "system": "http://unitsofmeasure.org", "code": "%"}
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "status": "final",
+        "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "vital-signs"}]}],
+        "code": {"coding": [{"system": "http://loinc.org", "code": "8310-5", "display": "Body temperature"}]},
+        "subject": {"reference": "Patient/syn-fhir-patient"},
+        "effectiveDateTime": "2026-10-01T09:35:00Z",
+        "valueQuantity": {"value": 100.4, "unit": "degF", "system": "http://unitsofmeasure.org", "code": "[degF]"}
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "status": "final",
+        "category": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/observation-category", "code": "laboratory"}]}],
+        "code": {"text": "C-reactive protein"},
+        "subject": {"reference": "Patient/syn-fhir-patient"},
+        "effectiveDateTime": "2026-10-01T10:05:00Z",
+        "valueQuantity": {"value": 48, "unit": "mg/L"},
+        "referenceRange": [{"high": {"value": 5, "unit": "mg/L"}}],
+        "interpretation": [{"coding": [{"system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation", "code": "H"}]}]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active"}]},
+        "code": {"text": "Asthma"},
+        "subject": {"reference": "Patient/syn-fhir-patient"}
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "status": "active",
+        "intent": "plan",
+        "medicationCodeableConcept": {"text": "Salbutamol inhaler"},
+        "subject": {"reference": "Patient/syn-fhir-patient"},
+        "dosageInstruction": [{"text": "2 puffs when required"}]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "clinicalStatus": {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical", "code": "active"}]},
+        "category": ["medication"],
+        "code": {"text": "Amoxicillin"},
+        "patient": {"reference": "Patient/syn-fhir-patient"},
+        "reaction": [{"manifestation": [{"text": "Rash"}], "severity": "mild"}]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Practitioner",
+        "name": [{"family": "Synthetic", "given": ["Clinician"]}]
+      }
+    }
+  ]
+}

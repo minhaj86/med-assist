@@ -1,0 +1,47 @@
+# Rendered at container start by the nginx image's envsubst step (only BACKEND_URL and OIDC_ORIGIN are substituted).
+server {
+    listen 8080;
+    server_name _;
+    root /usr/share/nginx/html;
+    server_tokens off;
+    client_max_body_size 25m;
+
+    # API requests go to the Spring Boot backend; the browser only ever talks to this origin.
+    location /api/ {
+        proxy_pass ${BACKEND_URL};
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
+        proxy_read_timeout 120s;
+    }
+
+    location = /healthz {
+        access_log off;
+        default_type text/plain;
+        return 200 "ok\n";
+    }
+
+    # Generated at startup from environment variables (see 40-runtime-config.sh); never cached.
+    location = /runtime-config.js {
+        include /etc/nginx/conf.d/security-headers.inc;
+        alias /tmp/medassist/runtime-config.js;
+        expires -1;
+    }
+
+    # Content-hashed bundles can be cached indefinitely.
+    location /assets/ {
+        include /etc/nginx/conf.d/security-headers.inc;
+        expires 1y;
+        try_files $uri =404;
+    }
+
+    # Single-page application fallback.
+    location / {
+        include /etc/nginx/conf.d/security-headers.inc;
+        expires -1;
+        try_files $uri /index.html;
+    }
+}

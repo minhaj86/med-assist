@@ -1,0 +1,24 @@
+[
+  {
+    "promptId": "clinical-reasoning",
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "description": "Structured differential reasoning for an encounter, grounded in provided facts (F-keys) and retrieved knowledge (K-keys).",
+    "intendedModel": "Instruction-tuned chat model with reliable JSON output (hosted OpenAI / Azure OpenAI deployment or a capable local model behind an OpenAI-compatible server)",
+    "outputSchemaId": "clinical-reasoning-output.v1",
+    "systemTemplate": "clinical-reasoning/1.0.0/system.txt",
+    "userTemplate": "clinical-reasoning/1.0.0/user.txt",
+    "repairTemplate": "clinical-reasoning/1.0.0/repair.txt"
+  },
+  {
+    "promptId": "clinical-assistant",
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "description": "Encounter-scoped question answering for clinicians; may propose (never apply) record updates.",
+    "intendedModel": "Instruction-tuned chat model with JSON output support",
+    "outputSchemaId": "clinical-assistant-output.v1",
+    "systemTemplate": "clinical-assistant/1.0.0/system.txt",
+    "userTemplate": "clinical-assistant/1.0.0/user.txt",
+    "repairTemplate": "clinical-assistant/1.0.0/repair.txt"
+  }
+]

@@ -1,0 +1,142 @@
+{
+  "realm": "medassist",
+  "displayName": "MedAssist (local development)",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "resetPasswordAllowed": false,
+  "rememberMe": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "bruteForceProtected": true,
+  "failureFactor": 5,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "waitIncrementSeconds": 60,
+  "passwordPolicy": "length(12) and notUsername",
+  "accessTokenLifespan": 300,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "revokeRefreshToken": true,
+  "refreshTokenMaxReuse": 0,
+  "eventsEnabled": true,
+  "adminEventsEnabled": true,
+  "roles": {
+    "realm": [
+      { "name": "CLINICIAN", "description": "Creates encounters, records clinical data, runs assessments and documents final assessments" },
+      { "name": "ADMIN", "description": "Administers users, rules, AI configuration, audit and system health" },
+      { "name": "KNOWLEDGE_MANAGER", "description": "Manages approved clinical knowledge documents" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "medassist-web",
+      "name": "MedAssist clinician workstation (browser)",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "frontchannelLogout": true,
+      "redirectUris": ["http://localhost:5173/*", "http://localhost:4173/*"],
+      "webOrigins": ["http://localhost:5173", "http://localhost:4173"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5173/*##http://localhost:4173/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "medassist-api audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "medassist-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "medassist-api",
+      "name": "MedAssist API (token audience only; no login flows)",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false
+    },
+    {
+      "clientId": "medassist-dev-cli",
+      "name": "LOCAL DEVELOPMENT ONLY - command-line tokens for API testing",
+      "description": "Resource-owner password grant for curl/scripts against the local stack. Never enable outside local development.",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "protocolMappers": [
+        {
+          "name": "medassist-api audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "config": {
+            "included.client.audience": "medassist-api",
+            "access.token.claim": "true",
+            "id.token.claim": "false",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "dr.demo",
+      "enabled": true,
+      "firstName": "Demo",
+      "lastName": "Clinician",
+      "email": "dr.demo@example.org",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "${MEDASSIST_DEMO_USER_PASSWORD}", "temporary": false }],
+      "realmRoles": ["CLINICIAN"]
+    },
+    {
+      "username": "dr.second",
+      "enabled": true,
+      "firstName": "Second",
+      "lastName": "Clinician",
+      "email": "dr.second@example.org",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "${MEDASSIST_DEMO_USER_PASSWORD}", "temporary": false }],
+      "realmRoles": ["CLINICIAN"]
+    },
+    {
+      "username": "admin.demo",
+      "enabled": true,
+      "firstName": "Demo",
+      "lastName": "Administrator",
+      "email": "admin.demo@example.org",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "${MEDASSIST_DEMO_USER_PASSWORD}", "temporary": false }],
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "username": "km.demo",
+      "enabled": true,
+      "firstName": "Demo",
+      "lastName": "KnowledgeManager",
+      "email": "km.demo@example.org",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "${MEDASSIST_DEMO_USER_PASSWORD}", "temporary": false }],
+      "realmRoles": ["KNOWLEDGE_MANAGER"]
+    }
+  ]
+}

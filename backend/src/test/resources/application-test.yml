@@ -1,0 +1,29 @@
+# Test profile: datasource is provided by Testcontainers (@ServiceConnection); tokens are injected with
+# spring-security-test, so no identity provider is contacted.
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:1/test-jwks-not-used
+          issuer-uri: http://localhost:1/realms/test
+          audiences: medassist-api
+  flyway:
+    user:
+    password:
+
+management:
+  server:
+    port: 0
+
+medassist:
+  demo:
+    seed-enabled: false
+  security:
+    open-api-public: true
+
+logging:
+  level:
+    com.medassist: INFO
+    org.testcontainers: WARN
+    tc: WARN

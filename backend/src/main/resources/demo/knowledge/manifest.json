@@ -1,0 +1,12 @@
+[
+  {"file": "chest-pain.md", "title": "Demonstration note: approach to acute chest pain",
+   "conditionTags": ["Acute coronary syndrome", "Pulmonary embolism", "Aortic dissection", "Pneumothorax", "Pericarditis", "Gastro-oesophageal reflux disease", "Musculoskeletal chest pain"]},
+  {"file": "breathlessness-cough-fever.md", "title": "Demonstration note: cough, fever and breathlessness",
+   "conditionTags": ["Pneumonia", "Pulmonary embolism", "Asthma exacerbation", "COPD exacerbation", "Heart failure", "Influenza", "Acute bronchitis"]},
+  {"file": "headache.md", "title": "Demonstration note: acute headache warning features",
+   "conditionTags": ["Subarachnoid haemorrhage", "Meningitis", "Migraine", "Tension-type headache", "Stroke"]},
+  {"file": "abdominal-pain.md", "title": "Demonstration note: acute abdominal pain",
+   "conditionTags": ["Appendicitis", "Cholecystitis", "Pancreatitis", "Bowel obstruction", "Gastroenteritis", "Urinary tract infection"]},
+  {"file": "sepsis-confusion.md", "title": "Demonstration note: infection, hypotension and new confusion",
+   "conditionTags": ["Sepsis", "Urinary tract infection", "Pneumonia", "Stroke"]}
+]
